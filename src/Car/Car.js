@@ -4,9 +4,9 @@ import  "./Car.css"
 
 class Car extends React.Component {
 
-    componentWillReceiveProps(nextProps) {
-        console.log('Car componentWillReceiveProps',nextProps);
-    }
+    //componentWillReceiveProps(nextProps) {
+    //    console.log('Car componentWillReceiveProps',nextProps);
+    //}
 
     shouldComponentUpdate(nextProps, nextState) {
         console.log('Car shouldComponentUpdate',nextProps, nextState);
@@ -14,13 +14,24 @@ class Car extends React.Component {
         return nextProps.name.trim() !== this.props.name.trim()
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        console.log('Car componentWillUpdate',nextProps, nextState);
+    //componentWillUpdate(nextProps, nextState) {
+    //    console.log('Car componentWillUpdate',nextProps, nextState);
+    //}
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+        console.log('Car getDerivedStateFromProps', nextProps, prevState);
+
+        return prevState
     }
 
     componentDidUpdate() {
         console.log('Car componentDidUpdate');
     }
+// доступ к домдереву до обновления state. Вызывается в момент обновления
+    getSnapshotBeforeUpdate() {
+        console.log('Car getSnapshotBeforeUpdate');
+    }
+
 // при удалении компонента
     componentWillUnmount() {
         console.log('Car componentWillUnmount');
