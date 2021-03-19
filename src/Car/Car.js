@@ -10,7 +10,7 @@ class Car extends React.Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         console.log('Car shouldComponentUpdate',nextProps, nextState);
-        console.log(nextProps.name.trim() !== this.props.name.trim());
+        //console.log(nextProps.name.trim() !== this.props.name.trim());
         return nextProps.name.trim() !== this.props.name.trim()
     }
 
@@ -18,11 +18,11 @@ class Car extends React.Component {
     //    console.log('Car componentWillUpdate',nextProps, nextState);
     //}
 
-    static getDerivedStateFromProps(nextProps, prevState) {
-        console.log('Car getDerivedStateFromProps', nextProps, prevState);
+    //static getDerivedStateFromProps(nextProps, prevState) {
+    //    console.log('Car getDerivedStateFromProps', nextProps, prevState);
 
-        return prevState
-    }
+    //    return prevState
+    //}
 
     componentDidUpdate() {
         console.log('Car componentDidUpdate');
@@ -38,8 +38,14 @@ class Car extends React.Component {
     }
 
     render() {
-console.log('Car Render');
+    console.log('Car Render');
 
+        if(Math.random() > 0.7) {
+            console.log(Math.random);
+            throw new Error ('Car random failed')
+        }
+
+        //[classes.input]
         const inputClasses = ['input']
    
         if(this.props.name !== '') {
