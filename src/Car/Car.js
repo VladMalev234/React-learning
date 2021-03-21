@@ -1,98 +1,71 @@
-import React from "react";
-//import Radium from 'radium'
-import  "./Car.css"
+import React from 'react';
+import classes from './Car.module.css'
+import PropTypes from 'prop-types'
+import withClass from '../hoc/withClass'
 
 class Car extends React.Component {
 
-    //componentWillReceiveProps(nextProps) {
-    //    console.log('Car componentWillReceiveProps',nextProps);
-    //}
-
-    shouldComponentUpdate(nextProps, nextState) {
-        console.log('Car shouldComponentUpdate',nextProps, nextState);
-        //console.log(nextProps.name.trim() !== this.props.name.trim());
-        return nextProps.name.trim() !== this.props.name.trim()
+    constructor(props) {
+        // чтобы базовый компонент мог работать с методом конструктора
+        super(props)
+        // создаем референцию на элемент input
+        this.inputRef = React.createRef()
     }
 
-    //componentWillUpdate(nextProps, nextState) {
-    //    console.log('Car componentWillUpdate',nextProps, nextState);
-    //}
-
-    //static getDerivedStateFromProps(nextProps, prevState) {
-    //    console.log('Car getDerivedStateFromProps', nextProps, prevState);
-
-    //    return prevState
-    //}
-
-    componentDidUpdate() {
-        console.log('Car componentDidUpdate');
-    }
-// доступ к домдереву до обновления state. Вызывается в момент обновления
-    getSnapshotBeforeUpdate() {
-        console.log('Car getSnapshotBeforeUpdate');
-    }
-
-// при удалении компонента
-    componentWillUnmount() {
-        console.log('Car componentWillUnmount');
+    // когда компонент зарендерился
+    componentDidMount() {
+        if(this.props.index === 0) {
+            this.inputRef.current.focus()
+        } 
     }
 
     render() {
-    console.log('Car Render');
-
-        if(Math.random() > 0.7) {
-            console.log(Math.random);
-            throw new Error ('Car random failed')
-        }
 
         //[classes.input]
-        const inputClasses = ['input']
+        const inputClasses = [classes.input]
    
         if(this.props.name !== '') {
-            inputClasses.push('green')
+            inputClasses.push(classes.green)
         } else {
-            inputClasses.push('red')
+            inputClasses.push(classes.red)
         }
 
         if(this.props.name.length > 4) {
-            inputClasses.push('bold')
-        }
-
-        const style = {
-            border: '1px solid #ccc',
-            boxShadow: '0 4px 5px 0 rgba(0, 0, 0, .14)',
-            ':hover': {
-                border: '1px solid #aaa',
-                boxShadow: '0 4px 15px 0 rgba(0, 0, 0, .25)',
-                cursor: 'pointer'
-            }
+            inputClasses.push(classes.bold)
         }
 
         return (
-            <div className="Car" style={style}> 
-            <h3> Car name: {this.props.name} </h3>
-            <p>Year: <strong>{this.props.year}</strong></p>
-            {//через props передаем сылку на нужную функцию которую хотим вызвать
-            }
-            <input 
-                type="text" 
-                onChange={this.props.onChangeName} 
-                value={this.props.name} 
-                className={inputClasses.join(' ')}
-            />
-            <button onClick={this.props.onDelete}>Delete</button>
-            </div>
+            <> 
+                <h3> Car name: {this.props.name} </h3>
+                <p>Year: <strong>{this.props.year}</strong></p>
+                {/*через props передаем сылку на нужную функцию которую хотим вызвать*/}
+                {/* inputRef - нода каждого инпута компонента this.inputRef - записываем чтоб инпут нода была доступна в классе*/}
+                <input 
+                //ref = {(inputRef)=> this.inputRef = inputRef }
+                    ref = {this.inputRef}
+                    type="text" 
+                    onChange={this.props.onChangeName} 
+                    value={this.props.name} 
+                    className={inputClasses.join(' ')}
+                />
+                <button onClick={this.props.onDelete}>Delete</button>
+            </>
         )
     }
 }
+//Свойство за которым будет смотреть реакт если оно оперделено
+Car.propTypes = {
+    name: PropTypes.string.isRequired,
+    year: PropTypes.number,
+    index: PropTypes.number,
+    onChangeName: PropTypes.func,
+    onDelete: PropTypes.func,
+}
+
+export default withClass(Car, classes.Car)
 
 //props- обьект в которм содержатся все дочерние атрибуты данного компонента
-//const Car = props => {
-    
-//}
-
-
-export default Car;
+//const Car = props => {}
 
 //function Car() {
 //    return(

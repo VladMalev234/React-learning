@@ -5,20 +5,22 @@ import Car from './Car/Car';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
 import Counter from './Counter/Counter'
 
-
+export const ClickedContext = React.createContext(false)
 
 
 
 class App extends Component {
 
+  
   constructor(props) {
-    //console.log('App constructor');
-    super(props)
+    // вызывает реакт компонент
+    super (props)
     this.state = {
+      clicked: false,
       cars : [
         {name: 'Ford', year: 2018},
-        //{name: 'Audi', year: 2016},
-        //{name: 'Mazda', year: 2010}
+        {name: 'Audi', year: 2016},
+        {name: 'Mazda', year: 2010}
       ],
       pageTitle: 'React components',
       showCars: false,
@@ -68,9 +70,6 @@ onDeleteHandler(index) {
 //  //console.log('App componentWillMount');
 //}
 
-componentDidMount() {
-  console.log('App componentDidMount');
-}
 
 // метод для отрисовки страницы
 render () {
@@ -86,11 +85,12 @@ render () {
         <ErrorBoundary  key = {index}>
           <Car 
           // уникальный индентификатор для удобного поиска
-          name = {car.name}
-          year = {car.year}
-          //onChangeTitle = {()=> this.changeTitleHendler(car.name)}
-          onChangeName = {event => this.onChangeName(event.target.value, index)}
-          onDelete = {this.onDeleteHandler.bind(this, index)}
+            name = {car.name}
+            year = {car.year}
+            index = {index}
+            //onChangeTitle = {()=> this.changeTitleHendler(car.name)}
+            onChangeName = {event => this.onChangeName(event.target.value, index)}
+            onDelete = {this.onDeleteHandler.bind(this, index)}
           />
         </ErrorBoundary>
       )
@@ -99,24 +99,32 @@ render () {
 
   return (
       <div style={divStyle}>
-        {/*<h1>{this.state.pageTitle}</h1>*/}
+          {/*<h1>{this.state.pageTitle}</h1>*/}
+          <h1>{this.props.title}</h1>
+          {/* this.state.clicked - свойство которое хотим расшарить */}
+          <ClickedContext.Provider value={this.state.clicked}>
+            <Counter />
+          </ClickedContext.Provider>
+          
 
-        <h1>{this.props.title}</h1>
-        <Counter/>
-        <hr/>
-        <button 
-        style={{marginTop:'20px'}}
-        onClick={this.toggleCarsHandler}
-        >Toggle cars</button>
-        {/* стили передаються как обьект стилей*/}
-        <div style={{
-          width: 400,
-          margin: 'auto',
-          padding: '20px'
-        }}>
-          {/* список всех машин */}
-          {cars}
-        </div>
+          <hr/>
+          <button 
+          style={{marginTop:'20px'}}
+          onClick={this.toggleCarsHandler}
+          >Toggle cars</button>
+
+          <button onClick={()=> this.setState({clicked: !this.state.clicked})}>Change clicked</button>
+
+          {/* стили передаються как обьект стилей*/}
+          
+          <div style={{
+            width: 400,
+            margin: 'auto',
+            padding: '20px'
+          }}>
+            {/* список всех машин */}
+            {cars}
+          </div>
         
       </div>
   )
